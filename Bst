@@ -1,0 +1,104 @@
+#include <iostream>
+using namespace std;
+
+// Structure for a tree node
+struct Node {
+    int key;
+    Node *left, *right;
+};
+
+// Function to create a new node
+Node* newNode(int item) {
+    Node* temp = new Node();
+    temp->key = item;
+    temp->left = temp->right = NULL;
+    return temp;
+}
+
+// Insert a node into the BST
+Node* insert(Node* root, int key) {
+    if (root == NULL)
+        return newNode(key);
+    if (key < root->key)
+        root->left = insert(root->left, key);
+    else
+        root->right = insert(root->right, key);
+    return root;
+}
+
+// Search for a key in the BST
+bool search(Node* root, int key) {
+    if (root == NULL)
+        return false;
+    if (root->key == key)
+        return true;
+    if (key < root->key)
+        return search(root->left, key);
+    return search(root->right, key);
+}
+
+// Calculate the depth (height) of the tree
+int depth(Node* root) {
+    if (root == NULL)
+        return 0;
+    int leftDepth = depth(root->left);
+    int rightDepth = depth(root->right);
+    return max(leftDepth, rightDepth) + 1;
+}
+
+// Display all leaf nodes
+void displayLeafNodes(Node* root) {
+    if (root != NULL) {
+        if (root->left == NULL && root->right == NULL) {
+            cout << root->key << " ";
+        }
+        displayLeafNodes(root->left);
+        displayLeafNodes(root->right);
+    }
+}
+
+// Main function
+int main() {
+    Node* root = NULL;
+    int choice, key;
+
+    while (true) {
+        cout << "\nBinary Search Tree Operations Menu:";
+        cout << "\n1. Insert a node";
+        cout << "\n2. Search for a node";
+        cout << "\n3. Display depth of the tree";
+        cout << "\n4. Display leaf nodes";
+        cout << "\n5. Exit";
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter key to insert: ";
+                cin >> key;
+                root = insert(root, key);
+                cout << key << " inserted into the tree.\n";
+                break;
+            case 2:
+                cout << "Enter key to search: ";
+                cin >> key;
+                cout << (search(root, key) ? "Found" : "Not Found") << endl;
+                break;
+            case 3:
+                cout << "Depth of the tree: " << depth(root) << endl;
+                break;
+            case 4:
+                cout << "Leaf nodes: ";
+                displayLeafNodes(root);
+                cout << endl;
+                break;
+            case 5:
+                cout << "Exiting...\n";
+                return 0;
+            default:
+                cout << "Invalid choice, please try again.\n";
+        }
+    }
+
+    return 0;
+}
